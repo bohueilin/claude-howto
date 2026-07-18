@@ -1,5 +1,101 @@
 # Changelog
 
+## [v2.1.212] — 2026-07-18
+
+### Synced to Claude Code v2.1.212
+
+Bumps tutorial coverage from the v2.1.206 baseline (2026-07-11 sync) to
+v2.1.212, plus a repo-internal accuracy audit that surfaced defects
+independent of the version delta.
+
+### Fixed
+
+- **Dead `#` memory-shortcut removed** — `02-memory/README.md` documented a
+  `#`-prefix quick-memory-add pattern in two places ("Method 3" and an
+  "Example 4" walkthrough) as a working feature, directly contradicting the
+  file's own commands table three lines from the top, which already marked
+  `#` **Discontinued**. Both sections were removed/rewritten to point at
+  `/memory` and conversational memory requests instead.
+- **Auto mode opt-in → opt-out on Bedrock/Vertex/Foundry (v2.1.207)** — auto
+  mode is now available by default on these providers (plus signed-in Claude
+  apps gateway sessions) for Sonnet 5, Opus 4.7/4.8, and Fable 5; the
+  `CLAUDE_CODE_ENABLE_AUTO_MODE` opt-in flag has no effect from v2.1.207
+  onward. Fixed in `09-advanced-features/README.md` and `10-cli/README.md`.
+- **`auto` permission mode mislabeled "Research Preview"** — current official
+  docs present `auto` as GA (available on all plans, gated only by model and
+  provider eligibility), not a preview feature. Corrected across
+  `09-advanced-features/README.md`, `CATALOG.md`, and `README.md`, which also
+  gained the missing `auto` row in its permission-mode summary.
+- **`/fork` / `/branch` history corrected** — the repo claimed "`/fork`
+  renamed to `/branch` in v2.1.77 (alias retained)." Current docs show these
+  are distinct, current commands: `/fork` spawns a background subagent that
+  inherits the conversation, `/branch` switches you into a copy in place.
+  They were a single aliased command only from v2.1.77 to v2.1.161. Fixed in
+  `01-slash-commands/README.md` and `09-advanced-features/README.md`.
+- **`effort` frontmatter enum completed** — `04-subagents/README.md` listed
+  4 levels (`low`/`medium`/`high`/`max`), missing `xhigh`, present in every
+  other file that documents this enum.
+- **Bundled-skills count reconciled** — `CATALOG.md`'s summary table said "9
+  bundled" against its own 10-row detail table; corrected to 10 (16 total).
+- **`INDEX.md` Feature Coverage Matrix fully recomputed** — header claimed "16
+  files," the Skills row claimed "28" for the same category; neither matched
+  the actual 21 files across the six documented skills. The Plugins row
+  similarly summed to 36 but showed 40. Every row was recounted by hand; the
+  Skills row now reads `5 | 9 | 7` (**21**) and the Plugins row now reads
+  `11 | 9 | 3 | 3 | 3 | 3 | 7` (**39**) — every row's Total now equals the sum
+  of its own cells.
+- **Stale `2.1.160` footer cluster bumped** — five files
+  (`08-checkpoints/checkpoint-examples.md`,
+  `09-advanced-features/planning-mode-examples.md`, and the three
+  `07-plugins/*/README.md` example-package files) still carried June 2026
+  footers with no version-specific content drift found; bumped to 2.1.212.
+- **`QUICK_REFERENCE.md` fully resynced** — was 52 versions behind at
+  `2.1.160`/June 2. Permission-mode block updated to `manual`
+  (formerly `default`), Compatible Models gained Sonnet 5, and the "New
+  Features (May 2026)" section was retitled and refreshed.
+- **`02-memory/README.md` Memory Hierarchy section rewritten** — replaced a
+  fabricated 8-tier strict-precedence model with the verified structure:
+  CLAUDE.md files and rules are concatenated into context (not selected by
+  override), and `managed-settings.d/` is a `settings.json` mechanism, not a
+  CLAUDE.md one. The Memory Architecture diagram was also corrected — it
+  previously conflated claude.ai's 24h synthesis cycle with Claude Code's
+  continuous auto memory.
+
+### Added
+
+- **Subagent output scanning (v2.1.210)** — Claude Code scans subagent
+  reports for prompt-injection patterns (fake system tags, fabricated
+  conversation turns, permission-bypass mentions) and neutralizes them.
+  Documented in a new subsection of `04-subagents/README.md`.
+- **Session-wide spawn caps (v2.1.212)** — default 200/session limits on
+  WebSearch calls (`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`) and subagent
+  spawns (`CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION`, reset by `/clear`).
+  Documented in `09-advanced-features/README.md`, `04-subagents/README.md`,
+  and `10-cli/README.md`.
+- **MCP long-running-tool auto-backgrounding (v2.1.212)** — MCP tool calls
+  over 2 minutes now auto-background instead of blocking the session;
+  configurable via `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS`. Documented in
+  `05-mcp/README.md`.
+- **`claude auto-mode reset` and `/resume` picker (v2.1.212)** — a new CLI
+  subcommand restores default auto-mode config; bare `/resume` now opens a
+  picker of past sessions (including removed ones) and resumes as a
+  background session. Documented in `09-advanced-features/README.md`,
+  `01-slash-commands/README.md`, and `10-cli/README.md`.
+- **Screen reader mode (v2.1.208)** — opt-in plain-text rendering via
+  `--ax-screen-reader`, `CLAUDE_AX_SCREEN_READER=1`, or `"axScreenReader":
+  true`. Documented in `09-advanced-features/README.md` and
+  `10-cli/README.md`.
+- **Task tool `mode` parameter deprecation (v2.1.212)** — noted in
+  `04-subagents/README.md`: subagents now inherit the parent session's
+  permission mode by default; the Task tool's per-call `mode` parameter is
+  ignored.
+
+### Known gaps (deferred, not fixed this sync)
+
+- `03-skills/.claude/skills/blog-draft/` is gitignored local testing scratch
+  (`# Local skill testing` in `03-skills/.gitignore`), not a tracked
+  duplicate of `03-skills/blog-draft/` — confirmed no action needed.
+
 ## [v2.1.160] — 2026-06-02
 
 ### Synced to Claude Code v2.1.160
